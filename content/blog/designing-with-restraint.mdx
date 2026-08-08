@@ -1,0 +1,38 @@
+---
+title: "Designing With Restraint: What Luxury Web Design Actually Means"
+excerpt: "Minimal doesn't mean empty. A breakdown of the decisions that separate a considered interface from a bare one."
+category: "Design"
+tags: ["Design Systems", "Minimalism", "UI"]
+date: "2026-06-14"
+image: "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80"
+author: "Mehedi Hasan"
+---
+
+Every client brief I get in 2026 asks for "minimal, but premium." Those two words get treated as synonyms, and they aren't. Minimal is a constraint on how much you show. Premium is a judgment on how well you show it. You can have a maximalist page that feels expensive, and a minimal one that feels cheap.
+
+## What actually reads as luxury
+
+The interfaces that read as luxury share a few traits:
+
+- Generous, **intentional** whitespace instead of empty space left over by accident
+- A type scale with real hierarchy, not just three sizes of the same weight
+- Restraint in motion — one considered animation beats five scattered ones
+- Consistent spacing, applied without exception
+
+The fastest way to make a minimal design feel cheap is inconsistent spacing. An 8px grid, applied without exception, does more for perceived quality than any single visual flourish.
+
+## A quick spacing scale
+
+Here's the scale I default to on most projects — it maps cleanly onto Tailwind's spacing tokens:
+
+| Token | Pixels | Use case |
+| --- | --- | --- |
+| `space-2` | 8px | Icon-to-label gaps |
+| `space-4` | 16px | Inline element spacing |
+| `space-6` | 24px | Card padding |
+| `space-12` | 48px | Section internal rhythm |
+| `space-24` | 96px | Section-to-section |
+
+## None of this is about having less content
+
+It's about giving every remaining element more room to do its job. When a client asks for "more minimal," what they usually mean is "more considered" — and that's a hierarchy problem, not a content problem.

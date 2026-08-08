@@ -1,0 +1,31 @@
+// Prisma schema for DBM Studio.
+// Run `npm run db:migrate` after setting DATABASE_URL to create these tables.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  budget    String?
+  message   String
+  status    String   @default("new") // new | read | replied | archived
+  createdAt DateTime @default(now())
+}
+
+model NewsletterSubscriber {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  confirmed    Boolean  @default(false)
+  subscribedAt DateTime @default(now())
+}
+
+// Future admin-panel models (Projects, Products, BlogPosts, Users) will
+// live here too once the admin panel is built — same database, same client.

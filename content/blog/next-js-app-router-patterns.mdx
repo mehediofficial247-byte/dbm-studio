@@ -1,0 +1,85 @@
+---
+title: "Six App Router Patterns I Use in Every Next.js Project"
+excerpt: "Server components, streaming, and layout composition patterns that hold up in real production codebases."
+category: "Engineering"
+tags: ["Next.js", "React", "Architecture"]
+date: "2026-05-02"
+image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80"
+author: "Mehedi Hasan"
+---
+
+The App Router rewards a different mental model than the old Pages Router. These are the patterns that have survived contact with real production codebases, not just demo apps.
+
+## 1. Keep client components at the leaves
+
+A page and its layout should default to server components. Push the `"use client"` boundary down to the smallest interactive unit — a button, a form, a dropdown — not the whole page.
+
+```tsx
+// ❌ The whole page opts out of server rendering
+"use client";
+
+export default function ProductPage({ product }) {
+  return (
+    <div>
+      <ProductGallery images={product.images} />
+      <AddToCartButton id={product.id} />
+    </div>
+  );
+}
+```
+
+```tsx
+// ✅ Only the interactive piece is a client component
+export default function ProductPage({ product }) {
+  return (
+    <div>
+      <ProductGallery images={product.images} />
+      <AddToCartButton id={product.id} />
+    </div>
+  );
+}
+
+// add-to-cart-button.tsx
+"use client";
+export function AddToCartButton({ id }: { id: string }) {
+  const [pending, setPending] = useState(false);
+  // ...
+}
+```
+
+## 2. Colocate data fetching
+
+Fetch data where it's used and let Next.js dedupe identical requests across the tree:
+
+```tsx
+async function getProject(slug: string) {
+  const res = await fetch(`https://api.example.com/projects/${slug}`);
+  return res.json();
+}
+
+export default async function ProjectPage({ params }: { params: { slug: string } }) {
+  const project = await getProject(params.slug);
+  return <ProjectDetail project={project} />;
+}
+```
+
+## 3. Route groups for structural separation
+
+Use `(marketing)` and `(app)` folders to keep a marketing site and an authenticated product cleanly separated in the same repo, without affecting the URL:
+
+```
+app/
+  (marketing)/
+    page.tsx        → /
+    about/page.tsx  → /about
+  (app)/
+    dashboard/page.tsx → /dashboard
+```
+
+## 4–6, briefly
+
+- **Parallel routes** for dashboards that need independently loading panes
+- **`loading.tsx` per segment** instead of one global spinner
+- **`generateStaticParams`** on every dynamic route you can pre-render — it's nearly free performance
+
+None of these are exotic. They're just the defaults that hold up once a codebase has more than five routes and more than one contributor.
